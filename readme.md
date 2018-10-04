@@ -1,3 +1,5 @@
+# Trivia Bot Backend [![Build Status](https://travis-ci.org/gardncl/trivia-bot-backend.svg?branch=master)](https://travis-ci.org/gardncl/trivia-bot-backend)
+
 # Getting Started With Docker, Scala & Sbt
 
 ## Scala Application
@@ -113,4 +115,3 @@ Finally, run the app in the container:
     Hello, world!
 
 Reference: https://docs.docker.com/get-started
-# trivia-bot-backend
