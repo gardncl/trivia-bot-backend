@@ -3,6 +3,7 @@ package route
 import cats.effect.{Effect, IO}
 import cats.implicits._
 import fs2.{Stream, StreamApp}
+import io.circe.generic.auto._
 import io.circe.syntax._
 import model._
 import org.http4s.circe._
@@ -27,7 +28,7 @@ object Server extends StreamApp[IO] with Http4sDsl[IO] {
 
     case req@POST -> Root / QUESTIONS =>
       req.decodeJson[Question]
-        .map(questionRepo.addQuestion)
+        .flatMap(question => questionRepo.addQuestion(question))
         .flatMap(question => Response(status = Status.Created).withBody(question.asJson))
   }
 
