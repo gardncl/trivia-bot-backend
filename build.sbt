@@ -1,3 +1,5 @@
+import Dependencies._
+
 lazy val root = (project in file(".")).settings(
   inThisBuild(
     List(
@@ -7,5 +9,8 @@ lazy val root = (project in file(".")).settings(
   name := "Trivia-Bot",
   scalacOptions ++= Seq(
     "-Ypartial-unification"
-  )
+  ),
+  libraryDependencies ++= deps
 )
+
+resolvers += Resolver.sonatypeRepo("releases")
