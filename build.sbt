@@ -1,4 +1,4 @@
-name := "HelloDocker-Sbt"
+name := "Trivia-Bot"
 
 version := "1.0"
 
