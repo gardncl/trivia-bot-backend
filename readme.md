@@ -19,7 +19,7 @@ scalaVersion := "2.12.2"
 > There are two sbt versions. One is for building the project itself, which is what is defined in the **build.properties** file here. There is a second sbt version that we'll cover later, which is the `sbt` installed on the machine. We sometimes refer that as `sbt-launcher` and it is used to  download and run a particular sbt version for building the project.
 
 ```
-sbt.version = 0.13.15
+sbt.version = 1.2.3
 ```
 
 * **src/main/scala/HelloWorld.scala** is our main application which simply print "Hello Word" on the console.
@@ -38,7 +38,7 @@ To run this application, make sure you have `sbt` (a.k.a. `sbt-launcher`) instal
 
     $ sbt sbtVersion    
     ...
-    [info] 0.13.15
+    [info] 1.2.3
 
 One launcher can launch many versions of sbt, and is generally backwards compatible. Therefore, this version number doesn't necessarily have to match the version number defined in **project/build.properties**. But, in general, we would like to keep this `sbt` up to date.  
     
