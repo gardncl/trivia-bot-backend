@@ -15,14 +15,16 @@ object Dependencies {
   )
 
   lazy val circe = Seq(
+    "io.circe" %% "circe-core" % Version.CirceVersion,
     "io.circe" %% "circe-generic" % Version.CirceVersion,
     "io.circe" %% "circe-literal" % Version.CirceVersion
   )
 
-  val deps: Seq[ModuleID] = Seq(
-    http4s,
-    circe
-  ).flatten
+  lazy val test = Seq(
+    "org.scalatest" %% "scalatest" % "3.0.5"
+  ).map(_ % Test)
+
+  val deps: Seq[ModuleID] = http4s ++ circe ++ test
 
 
 }

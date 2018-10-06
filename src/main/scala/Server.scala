@@ -32,8 +32,8 @@ object Server extends StreamApp[IO] with Http4sDsl[IO] {
         .flatMap(question => Response(status = Status.Created).withBody(question.asJson))
   }
 
-  override def stream(args: List[String], requestShutdown: IO[Unit])
-  = Stream.eval(QuestionRepository.empty[IO]).flatMap { questionRepo =>
+  override def stream(args: List[String], requestShutdown: IO[Unit]) =
+    Stream.eval(QuestionRepository.empty[IO]).flatMap { questionRepo =>
     BlazeBuilder[IO]
       .bindHttp(8080, "0.0.0.0")
       .mountService(service(questionRepo), "/")
