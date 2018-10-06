@@ -1,5 +1,16 @@
-name := "Trivia-Bot"
+import Dependencies._
 
-version := "1.0"
+lazy val root = (project in file(".")).settings(
+  inThisBuild(
+    List(
+      scalaVersion := "2.12.7",
+      version := "1.0"
+    )),
+  name := "Trivia-Bot",
+  scalacOptions ++= Seq(
+    "-Ypartial-unification"
+  ),
+  libraryDependencies ++= deps
+)
 
-scalaVersion := "2.12.7"
+resolvers += Resolver.sonatypeRepo("releases")
