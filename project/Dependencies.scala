@@ -5,6 +5,7 @@ object Dependencies {
   object Version {
     val Http4sVersion = "0.18.19"
     val CirceVersion = "0.9.1"
+    val LogbackVersion = "1.2.3"
   }
 
   lazy val http4s: Seq[ModuleID] = Seq(
@@ -24,7 +25,11 @@ object Dependencies {
     "org.scalatest" %% "scalatest" % "3.0.5"
   ).map(_ % Test)
 
-  val deps: Seq[ModuleID] = http4s ++ circe ++ test
+  lazy val logging = Seq(
+    "ch.qos.logback"  %  "logback-classic" % Version.LogbackVersion
+  )
+
+  val deps: Seq[ModuleID] = http4s ++ circe ++ test ++ logging
 
 
 }
