@@ -14,3 +14,6 @@ lazy val root = (project in file(".")).settings(
 )
 
 resolvers += Resolver.sonatypeRepo("releases")
+
+enablePlugins(JavaAppPackaging)
+enablePlugins(DockerPlugin)

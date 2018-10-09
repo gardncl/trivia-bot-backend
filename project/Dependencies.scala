@@ -29,7 +29,11 @@ object Dependencies {
     "ch.qos.logback"  %  "logback-classic" % Version.LogbackVersion
   )
 
-  val deps: Seq[ModuleID] = http4s ++ circe ++ test ++ logging
+  lazy val swagger = Seq(
+    "org.webjars" % "swagger-ui" % "3.2.2"
+  )
+
+  val deps: Seq[ModuleID] = http4s ++ circe ++ test ++ logging ++ swagger
 
 
 }
