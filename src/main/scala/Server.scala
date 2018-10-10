@@ -32,11 +32,18 @@ object Server extends StreamApp[IO] with Http4sDsl[IO] {
         .flatMap(question => Response(status = Status.Created).withBody(question.asJson))
   }
 
-  override def stream(args: List[String], requestShutdown: IO[Unit]) =
+  override def stream(args: List[String], requestShutdown: IO[Unit]) = {
+    val ip = Option(System.getenv("OPENSHIFT_DIY_IP")).getOrElse("0.0.0.0")
+    val port = (Option(System.getenv("PORT")) orElse
+      Option(System.getenv("HTTP_PORT")))
+      .map(_.toInt)
+      .getOrElse(8080)
+
     Stream.eval(QuestionRepository.empty[IO]).flatMap { questionRepo =>
-    BlazeBuilder[IO]
-      .bindHttp(8080, "0.0.0.0")
-      .mountService(service(questionRepo), "/")
-      .serve
+      BlazeBuilder[IO]
+        .bindHttp(port, ip)
+        .mountService(service(questionRepo), "/")
+        .serve
+    }
   }
 }

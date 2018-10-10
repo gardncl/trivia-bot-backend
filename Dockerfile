@@ -10,8 +10,8 @@ RUN \
   apt-get install sbt && \
   sbt sbtVersion
 
-WORKDIR /HelloWorld
+WORKDIR /TriviaBot
 
-COPY . /HelloWorld
+COPY . /TriviaBot
 
 CMD sbt run
