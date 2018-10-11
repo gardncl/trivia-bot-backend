@@ -6,6 +6,29 @@
 sbt stage deployHeroku
 ```
 
+## Slack
+
+### Create a [slash command](https://api.slack.com/slash-commands) inside Slack
+It will send a payload of data in `application/x-www-form-urlencoded` form. The object of interest is `text` which contains the text the user added to the slash command.
+
+```java
+Map(
+   channel_name -> ListBuffer(directmessage),
+   team_id -> ListBuffer(*******),
+   response_url -> ListBuffer(*******),
+   trigger_id -> ListBuffer(*******),
+   text -> ListBuffer(Just testing!),
+   command -> ListBuffer(/example),
+   user_id -> ListBuffer(*******),
+   channel_id -> ListBuffer(*******),
+   token -> ListBuffer(*******),
+   team_domain -> ListBuffer(teika),
+   user_name -> ListBuffer(clay)
+)
+```
+
+
+
 # Getting Started With Docker
 
 ## Dockerfile
