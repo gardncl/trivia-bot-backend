@@ -9,10 +9,12 @@ import model._
 import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.blaze.BlazeBuilder
-import org.http4s.{HttpService, Response, Status}
+import org.http4s.{HttpService, Response, Status, UrlForm}
 import repository.QuestionRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
+
+case class Message(text: String)
 
 object Server extends StreamApp[IO] with Http4sDsl[IO] {
 
@@ -27,9 +29,22 @@ object Server extends StreamApp[IO] with Http4sDsl[IO] {
       }
 
     case req@POST -> Root / QUESTIONS =>
-      req.decodeJson[Question]
-        .flatMap(question => questionRepo.addQuestion(question))
-        .flatMap(question => Response(status = Status.Created).withBody(question.asJson))
+      req.decode[UrlForm] { form =>
+        form.values.get("text") match {
+          case Some(seq) => {
+            val question: Question = Question(seq.mkString)
+            questionRepo.addQuestion(question)
+              .flatMap(uuid => Response(status = Status.Created)
+                .withBody(Message(uuid).asJson))
+          }
+          case None => F.pure(Response(status = Status.BadRequest))
+        }
+      }
+
+
+    case req@POST -> Root / "example" =>
+      req.decode[UrlForm](form => Response(status = Status.Ok).withBody(Message(form.values.toString).asJson))
+
   }
 
   override def stream(args: List[String], requestShutdown: IO[Unit]) = {
