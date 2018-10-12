@@ -13,7 +13,11 @@ lazy val root = (project in file(".")).settings(
   libraryDependencies ++= deps
 )
 
-resolvers += Resolver.sonatypeRepo("releases")
+resolvers ++= Seq(
+  Resolver.sonatypeRepo("releases"),
+  "tpolecat" at "http://dl.bintray.com/tpolecat/maven",
+  "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
+)
 
 enablePlugins(JavaAppPackaging)
 enablePlugins(DockerPlugin)

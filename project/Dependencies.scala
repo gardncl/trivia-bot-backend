@@ -6,6 +6,8 @@ object Dependencies {
     val Http4sVersion = "0.18.19"
     val CirceVersion = "0.9.1"
     val LogbackVersion = "1.2.3"
+    val Doobie = "0.5.2"
+    val PureConfig = "0.9.1"
   }
 
   lazy val http4s: Seq[ModuleID] = Seq(
@@ -33,7 +35,19 @@ object Dependencies {
     "org.webjars" % "swagger-ui" % "3.2.2"
   )
 
-  val deps: Seq[ModuleID] = http4s ++ circe ++ test ++ logging ++ swagger
+  lazy val database = Seq(
+    "org.tpolecat"   %% "doobie-core"     % Version.Doobie,
+    "org.tpolecat"   %% "doobie-hikari"   % Version.Doobie,
+    "org.tpolecat"   %% "doobie-postgres" % Version.Doobie,
+    "org.postgresql" % "postgresql"       % "42.1.4",
+    "org.flywaydb"   % "flyway-core"      % "4.2.0"
+  )
+
+  lazy val config = Seq(
+    "com.github.pureconfig" %% "pureconfig" % Version.PureConfig
+  )
+
+  val deps: Seq[ModuleID] = http4s ++ circe ++ test ++ logging ++ swagger ++ database ++ config
 
 
 }
