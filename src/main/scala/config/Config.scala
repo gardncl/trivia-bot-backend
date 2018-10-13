@@ -7,6 +7,7 @@ import pureconfig.error.ConfigReaderException
 case class Config(database: DatabaseConfig)
 
 object Config {
+
   import pureconfig._
 
   def load(configFile: String = "application.conf"): IO[Config] = {
