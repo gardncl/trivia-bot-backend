@@ -1,10 +1,18 @@
 # Trivia Bot Backend [![Build Status](https://travis-ci.org/gardncl/trivia-bot-backend.svg?branch=master)](https://travis-ci.org/gardncl/trivia-bot-backend)
 
-### Deploying to Heroku
+## Heroku
+
+### Deploying
 
 ```shell
 sbt stage deployHeroku
 ```
+
+### Environment variables that require setting
+ * TRIVIA_BACKEND_DB_PASSWORD
+ * TRIVIA_BACKEND_DB_URL <- make sure this starts with `jdbc:postgresql:` and not `jdbc:postgres:`
+ * TRIVIA_BACKEND_DB_USERNAME
+
 
 ## Slack
 

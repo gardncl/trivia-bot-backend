@@ -2,6 +2,8 @@ package route
 
 import cats.effect.{Effect, IO}
 import cats.implicits._
+import config.Config
+import db.Database
 import fs2.{Stream, StreamApp}
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -54,11 +56,16 @@ object Server extends StreamApp[IO] with Http4sDsl[IO] {
       .map(_.toInt)
       .getOrElse(8080)
 
-    Stream.eval(QuestionRepository.empty[IO]).flatMap { questionRepo =>
-      BlazeBuilder[IO]
-        .bindHttp(port, ip)
-        .mountService(service(questionRepo), "/")
-        .serve
-    }
+    for {
+      config <- Stream.eval(Config.load())
+      transactor <- Stream.eval(Database.transactor(config.database))
+      _ <- Stream.eval(Database.initialize(transactor))
+      exitCode <- Stream.eval(QuestionRepository.empty[IO]).flatMap { questionRepo =>
+        BlazeBuilder[IO]
+          .bindHttp(port, ip)
+          .mountService(service(questionRepo), "/")
+          .serve
+      }
+    } yield exitCode
   }
 }
