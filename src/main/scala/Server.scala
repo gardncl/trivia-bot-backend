@@ -12,7 +12,7 @@ import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.blaze.BlazeBuilder
 import org.http4s.{HttpService, Response, Status, UrlForm}
-import repository.QuestionRepository
+import repository.{QuestionAnswerRepository, QuestionRepository}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -49,6 +49,23 @@ object Server extends StreamApp[IO] with Http4sDsl[IO] {
 
   }
 
+  def realService(questionRepo: QuestionAnswerRepository) = HttpService[IO] {
+
+    case GET -> Root / QUESTIONS =>
+      for {
+        result <- questionRepo.getRandomQuestion
+        response <- result match {
+          case Left(_) => NotFound()
+          case Right(value) => Ok(value.question.asJson)
+        }
+      } yield {
+        response
+      }
+
+    case req@POST -> Root / "example" =>
+      req.decode[UrlForm](form => Response(status = Status.Ok).withBody(Message(form.values.toString).asJson))
+  }
+
   override def stream(args: List[String], requestShutdown: IO[Unit]) = {
     val ip = Option(System.getenv("OPENSHIFT_DIY_IP")).getOrElse("0.0.0.0")
     val port = (Option(System.getenv("PORT")) orElse
@@ -60,12 +77,10 @@ object Server extends StreamApp[IO] with Http4sDsl[IO] {
       config <- Stream.eval(Config.load())
       transactor <- Stream.eval(Database.transactor(config.database))
       _ <- Stream.eval(Database.initialize(transactor))
-      exitCode <- Stream.eval(QuestionRepository.empty[IO]).flatMap { questionRepo =>
-        BlazeBuilder[IO]
-          .bindHttp(port, ip)
-          .mountService(service(questionRepo), "/")
-          .serve
-      }
+      exitCode <- BlazeBuilder[IO]
+        .bindHttp(port, ip)
+        .mountService(realService(new QuestionAnswerRepository(transactor)), "/")
+        .serve
     } yield exitCode
   }
 }

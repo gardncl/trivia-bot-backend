@@ -27,4 +27,11 @@ class QuestionAnswerRepository(transactor: Transactor[IO]) {
     }
   }
 
+  def getRandomQuestion: IO[Either[RuntimeException, QuestionAnswer]] = {
+    sql"SELECT * FROM question_answer ORDER BY random() limit 1".query[QuestionAnswer].option.transact(transactor).map {
+      case Some(qa) => Right(qa)
+      case None => Left(new RuntimeException("no questions!"))
+    }
+  }
+
 }
