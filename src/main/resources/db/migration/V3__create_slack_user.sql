@@ -1,6 +1,6 @@
-CREATE TABLE slack_users {
+CREATE TABLE slack_users (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    team_domain INTEGER REFERENCES team_domains(id),
+    team_domain_id INTEGER REFERENCES team_domains(id),
         UNIQUE(name, team_domain)
-};
+);
