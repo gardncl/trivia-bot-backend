@@ -21,7 +21,7 @@ class QuestionAnswerPairsRepository(transactor: Transactor[IO]) {
     }
   }
 
-  def createTodo(questionAnswer: QuestionAnswerPair): IO[QuestionAnswerPair] = {
+  def addQuestionAnswer(questionAnswer: QuestionAnswerPair): IO[QuestionAnswerPair] = {
     sql"INSERT INTO question_answer_pairs (question, answer) VALUES (${questionAnswer.question}, ${questionAnswer.answer})".update.withUniqueGeneratedKeys[Int]("id").map(_.toString).transact(transactor).map {
       id => questionAnswer.copy(id = id)
     }
