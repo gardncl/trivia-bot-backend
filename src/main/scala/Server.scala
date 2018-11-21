@@ -13,6 +13,8 @@ import org.http4s.dsl.Http4sDsl
 import org.http4s.server.blaze.BlazeBuilder
 import org.http4s.{HttpService, Response, Status, UrlForm}
 import repository.QuestionRepository
+import routes.QuestionsRoute
+import service.QuestionService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -60,12 +62,11 @@ object Server extends StreamApp[IO] with Http4sDsl[IO] {
       config <- Stream.eval(Config.load())
       transactor <- Stream.eval(Database.transactor(config.database))
       _ <- Stream.eval(Database.initialize(transactor))
-      exitCode <- Stream.eval(QuestionRepository.empty[IO]).flatMap { questionRepo =>
-        BlazeBuilder[IO]
-          .bindHttp(port, ip)
-          .mountService(service(questionRepo), "/")
-          .serve
-      }
+      exitCode <- BlazeBuilder[IO]
+        .bindHttp(port, ip)
+        .mountService(new QuestionsRoute(new QuestionService(transactor)).foo, "/")
+        .serve
+
     } yield exitCode
   }
 }
