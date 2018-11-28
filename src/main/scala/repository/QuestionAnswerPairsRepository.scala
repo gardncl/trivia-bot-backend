@@ -2,10 +2,9 @@ package repository
 
 
 import cats.effect.IO
+import doobie.implicits._
 import doobie.util.transactor.Transactor
 import fs2.Stream
-import doobie._
-import doobie.implicits._
 import model.QuestionAnswerPair
 
 class QuestionAnswerPairsRepository(transactor: Transactor[IO]) {
