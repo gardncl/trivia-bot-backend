@@ -13,9 +13,9 @@ class QuestionService(transactor: Transactor[IO]) {
     questionAnswerRepo.addQuestionAnswer(qa)
   }
 
-  /** Checks if the answer to the most recently asked question is correct */
-  def isAnswerCorrect(questionId: Int, userId: Int, answer: String) = {
-
-  }
+//  /** Checks if the answer to the most recently asked question is correct */
+//  def isAnswerCorrect(questionId: Int, userId: Int, answer: String) = {
+//
+//  }
 
 }
