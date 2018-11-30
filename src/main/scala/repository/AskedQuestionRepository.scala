@@ -18,12 +18,7 @@ class AskedQuestionRepository(transactor: Transactor[IO]) {
   }
 
   def getAnswerToMostRecentQuestionAskedToUser(userId: String): IO[Option[(String, Int)]] = {
-    sql"""
-         |select p.answer, l.id from asked_question_ledger as l
-         |join question_answer_pairs as p on l.question_id = p.id
-         |where l.user_id = $userId
-         |order by l.asked_at desc limit 1;
-       """
+    sql" select p.answer, l.id from asked_question_ledger as l join question_answer_pairs as p on l.question_id = p.id where l.user_id = $userId order by l.asked_at desc limit 1; "
       .query[(String, Int)]
       .option
       .transact(transactor)

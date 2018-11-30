@@ -14,7 +14,7 @@ import org.http4s.server.blaze.BlazeBuilder
 import org.http4s.{HttpService, Response, Status, UrlForm}
 import repository.QuestionRepository
 import routes.QuestionsRoute
-import service.QuestionService
+import service.{AnswerQuestionService, QuestionService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -64,7 +64,7 @@ object Server extends StreamApp[IO] with Http4sDsl[IO] {
       _ <- Stream.eval(Database.initialize(transactor))
       exitCode <- BlazeBuilder[IO]
         .bindHttp(port, ip)
-        .mountService(new QuestionsRoute(new QuestionService(transactor)).foo, "/")
+        .mountService(new QuestionsRoute(new QuestionService(transactor), new AnswerQuestionService(transactor)).foo, "/")
         .serve
 
     } yield exitCode
