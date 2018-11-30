@@ -1,0 +1,1 @@
+select * from answered_question_ledger;
