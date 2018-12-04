@@ -1,5 +1,6 @@
-CREATE TABLE question_answer (
-  id UUID,
-  question TEXT,
-  answer TEXT
+CREATE TABLE question_answer_pairs (
+  id SERIAL PRIMARY KEY,
+  question TEXT NOT NULL,
+  answer TEXT NOT NULL,
+    UNIQUE(question)
 );
