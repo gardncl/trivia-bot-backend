@@ -10,21 +10,24 @@ import repository.{AnsweredQuestionLedgerRepository, AskedQuestionRepository}
 class AnswerQuestionService(transactor: Transactor[IO]) {
 
   private val askedQuestionRepository = new AskedQuestionRepository(transactor)
-  private val answeredQuestionLedgerRepository = new AnsweredQuestionLedgerRepository()
+  private val answeredQuestionLedgerRepository = new AnsweredQuestionLedgerRepository(transactor)
 
   /** takes an answer for a user and inserts the answer */
   def handleGuess(userId: String, guess: String, respondedAt: Date = new Date()): IO[Option[Boolean]] =
     for {
       answerOption <- askedQuestionRepository.getAnswerToMostRecentQuestionAskedToUser(userId)
-      _ <- answerOption match {
-        case None => IO.pure(1)
+      answeredQuestionLedgerEntry = answerOption match {
+        case None => None
         case Some((answer, questionAskedId)) => {
           val correct = answer == guess
-          val insert = AnsweredQuestionInsert(questionAskedId, guess, correct, respondedAt)
-          IO.pure(answeredQuestionLedgerRepository.insert(insert).run)
+          Some(AnsweredQuestionInsert(questionAskedId, guess, correct, respondedAt))
         }
       }
-
+      _ <- answeredQuestionLedgerEntry match {
+        case None => IO.pure(-1)
+        case Some(ledger) =>
+          answeredQuestionLedgerRepository.insert(ledger)
+      }
     } yield {
       answerOption.map(_._1 == guess)
     }
