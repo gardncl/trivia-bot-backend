@@ -19,7 +19,7 @@ trait DbTest extends Specification with IOChecker {
     pass
   )
 
-  def runMigrations: Unit = {
+  def runMigrations(): Unit = {
     lazy val flyway = new Flyway
     flyway.setDataSource(url, user, pass)
     flyway.setLocations("classpath:db/migration")
