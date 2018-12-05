@@ -24,6 +24,7 @@ trait DbTest extends Specification with IOChecker {
     flyway.setDataSource(url, user, pass)
     flyway.setLocations("classpath:db/migration")
     flyway.migrate()
+    ()
   }
 
 }
