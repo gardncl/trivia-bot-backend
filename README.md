@@ -36,6 +36,13 @@ Map(
 ```
 
 
+### Testing locally
+Create a database called `travis_ci_test` that connects on localhost:5432
+Make sure that the role `postgres` without a password exists with priviledges to log-in and access tables
+```sql
+grant connect on database travis_ci_test to postgres;
+alter role postgres with login;
+```
 
 # Getting Started With Docker
 
