@@ -3,10 +3,11 @@ package repository
 import cats.effect.IO
 import doobie.specs2.IOChecker
 import doobie.util.transactor.Transactor
+import doobie.util.update
 import org.flywaydb.core.Flyway
 import org.specs2.mutable.Specification
 
-trait DbTest extends Specification with IOChecker {
+class DbTest extends Specification with IOChecker {
 
   lazy val url = "jdbc:postgresql://localhost:5432/travis_ci_test"
   lazy val user = "postgres"
@@ -26,5 +27,11 @@ trait DbTest extends Specification with IOChecker {
     flyway.migrate()
     ()
   }
+
+  runMigrations()
+
+  val megalist: List[update.Update0] = AnsweredQuestionLedgerRepositorySpec.runTests(transactor)
+
+  megalist.map(check)
 
 }
