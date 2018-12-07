@@ -30,7 +30,9 @@ class DbTest extends Specification with IOChecker {
 
   runMigrations()
 
-  val megalist: List[update.Update0] = AnsweredQuestionLedgerRepositorySpec.runTests(transactor)
+  val megalist: List[update.Update0] =
+    List(AnsweredQuestionLedgerRepositorySpec)
+      .flatMap(_.runTests(transactor))
 
   megalist.map(check)
 
