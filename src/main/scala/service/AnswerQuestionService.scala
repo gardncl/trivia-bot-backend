@@ -26,7 +26,7 @@ class AnswerQuestionService(transactor: Transactor[IO]) {
       _ <- answeredQuestionLedgerEntry match {
         case None => IO.pure(-1)
         case Some(ledger) =>
-          answeredQuestionLedgerRepository.insert(ledger)
+          answeredQuestionLedgerRepository.insertAndReturnId(ledger)
       }
     } yield {
       answerOption.map(_._1 == guess)

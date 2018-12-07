@@ -24,7 +24,8 @@ object Dependencies {
   )
 
   lazy val test = Seq(
-    "org.scalatest" %% "scalatest" % "3.0.5"
+    "org.scalatest" %% "scalatest" % "3.0.5",
+    "org.tpolecat"   %% "doobie-specs2" % Version.Doobie,
   ).map(_ % Test)
 
   lazy val logging = Seq(
